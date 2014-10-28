@@ -1,0 +1,9 @@
+{
+	"rules": {
+		"no-process-exit": 0,
+	},
+
+	"globals": {
+		"console": true
+	}
+}
