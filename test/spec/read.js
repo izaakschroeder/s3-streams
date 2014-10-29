@@ -3,7 +3,6 @@
 
 var _ = require('lodash'),
 	crypto = require('crypto'),
-	AWS = require('aws-sdk'),
 	S3ReadStream = require('read'),
 	Stream = require('stream'),
 	EventEmitter = require('events').EventEmitter;
@@ -51,8 +50,7 @@ describe('S3ReadStream', function() {
 
 	beforeEach(function() {
 		this.sandbox = sinon.sandbox.create();
-		this.s3 = sinon.createStubInstance(AWS.S3);
-		this.s3.getObject = sinon.stub();
+		this.s3 = { getObject: this.sandbox.stub() };
 		this.request = new EventEmitter();
 		this.s3.getObject.returns(this.request);
 		this.source = new Stream.PassThrough();

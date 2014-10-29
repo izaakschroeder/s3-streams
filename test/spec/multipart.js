@@ -2,18 +2,18 @@
 'use strict';
 
 var _ = require('lodash'),
-	AWS = require('aws-sdk'),
 	MultipartUpload = require('multipart');
 
 describe('MultipartUpload', function() {
 
 	beforeEach(function() {
 		this.sandbox = sinon.sandbox.create();
-		this.s3 = sinon.createStubInstance(AWS.S3);
-		this.s3.uploadPart = sinon.stub();
-		this.s3.abortMultipartUpload = sinon.stub();
-		this.s3.completeMultipartUpload = sinon.stub();
-		this.s3.createMultipartUpload = sinon.stub();
+		this.s3 = {
+			uploadPart: this.sandbox.stub(),
+			abortMultipartUpload: this.sandbox.stub(),
+			completeMultipartUpload: this.sandbox.stub(),
+			createMultipartUpload: this.sandbox.stub()
+		};
 	});
 
 	afterEach(function() {
