@@ -2,14 +2,13 @@
 'use strict';
 
 var _ = require('lodash'),
-	AWS = require('aws-sdk'),
 	S3WriteStream = require('write');
 
 describe('S3WriteStream', function() {
 
 	beforeEach(function() {
 		this.sandbox = sinon.sandbox.create();
-		this.s3 = sinon.createStubInstance(AWS.S3);
+		this.s3 = { createMultipartUpload: this.sandbox.stub() };
 	});
 
 	afterEach(function() {
