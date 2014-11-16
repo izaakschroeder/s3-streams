@@ -18,7 +18,9 @@
 		"coverage": "istanbul check-coverage --statement 100 --branch 100 --function 100"
 	},
 	"dependencies": {
-		"lodash": "*"
+		"lodash": "^2.4.1",
+		"readable-stream": "^1.1.13",
+		"es6-promise": "^2.0.0"
 	},
 	"peerDependencies": {
 		"aws-sdk": "*"

@@ -4,7 +4,7 @@
 var _ = require('lodash'),
 	crypto = require('crypto'),
 	S3ReadStream = require('read'),
-	Stream = require('stream'),
+	Stream = require('readable-stream'),
 	EventEmitter = require('events').EventEmitter;
 
 /*
