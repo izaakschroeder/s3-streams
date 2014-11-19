@@ -10,7 +10,9 @@
 
 Amazon makes it a giant pain to do anything stream-like when it comes to S3 (given the general restriction that every request needs a `Content-Length` header). We provide native stream classes (both `Readable` and `Writable`) that wrap `aws-sdk` S3 requests and responses to make your life easier.
 
-IMPORTANT: You must be using `node >= 0.11` since we use newer stream functionality.
+IMPORTANT: This library uses the `streams3` API. In order to provide compatibility with older versions of node we make use of [readable-stream]. This is unlikely to have any effect on your code but has not yet been well tested.
+
+If you are using `node 0.8` you must ensure your version of `npm` is at least `1.4.6`.
 
 Features:
  * Native read streams,
@@ -73,3 +75,5 @@ Existing frameworks:
  * s3-download-stream (only does downloads, downloads are streamed by S3 part, not by individual buffer chunks)
  * streaming-s3 (overall terrible API; no actual streams)
  * create-s3-object-write-stream (probably one of the better ones)
+
+[readable-stream]: http://www.nearform.com/nodecrunch/dont-use-nodes-core-stream-module/

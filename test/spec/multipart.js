@@ -2,7 +2,8 @@
 'use strict';
 
 var _ = require('lodash'),
-	MultipartUpload = require('multipart');
+	MultipartUpload = require('multipart'),
+	Promise = require('es6-promise').Promise;
 
 describe('MultipartUpload', function() {
 

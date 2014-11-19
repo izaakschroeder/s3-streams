@@ -2,7 +2,8 @@
 'use strict';
 
 var _ = require('lodash'),
-	S3WriteStream = require('write');
+	S3WriteStream = require('write'),
+	Promise = require('es6-promise').Promise;
 
 describe('S3WriteStream', function() {
 
@@ -74,8 +75,8 @@ describe('S3WriteStream', function() {
 			stream.write(new Buffer('a'));
 			stream.write(new Buffer('b'));
 			stream.end();
-			expect(stream._part).to.be.calledOnce
-				.and.calledWith(new Buffer('ab'));
+			expect(stream._part).to.be.calledOnce;
+			expect(stream._part.getCall(0).args[0].toString()).to.equal('ab');
 		});
 	});
 
@@ -85,6 +86,7 @@ describe('S3WriteStream', function() {
 			var stream = S3WriteStream(this.s3, { Bucket: 'foo', Key: 'bar' });
 			this.stream = stream;
 			this.sandbox.stub(this.stream.upload, 'uploadPart');
+			this.sandbox.stub(this.stream.upload, 'finish');
 			this.sandbox.spy(this.stream, 'emit');
 		});
 
@@ -95,18 +97,75 @@ describe('S3WriteStream', function() {
 		});
 
 		it('should trigger an error when #uploadPart fails', function(done) {
-			var stream = this.stream;
+			var spy = sinon.spy();
 			this.stream.upload.uploadPart.returns(Promise.reject('fail'));
-			this.stream.end(new Buffer(S3WriteStream.lowWaterMark));
+			this.stream.upload.finish.returns(Promise.resolve());
 			this.stream.on('error', function(err) {
-				expect(stream.emit).to.be.calledOnce;
-				expect(err).to.equal('fail');
-				done();
-			}).on('end', function() {
+				try {
+					expect(spy).to.be.calledOnce.and.calledWith('fail');
+					expect(err).to.equal('fail');
+					done();
+				} catch(e) {
+					done(e);
+				}
+			}).on('finish', function() {
 				done('no error triggered');
 			});
+			this.stream.write(new Buffer(S3WriteStream.lowWaterMark), spy);
+			// The callback in end will NOT be triggered as per the stream
+			// spec; the end callback fires _only_ when the finish event
+			// fires, and since there's an error there will be no finish.
+			// Important to keep in mind.
+			this.stream.end();
 		});
 	});
 
+	describe('#end', function() {
 
+		beforeEach(function() {
+			var stream = S3WriteStream(this.s3, { Bucket: 'foo', Key: 'bar' });
+			this.stream = stream;
+			this.sandbox.stub(this.stream.upload, 'uploadPart');
+			this.sandbox.stub(this.stream.upload, 'finish');
+			this.sandbox.spy(this.stream, 'emit');
+			this.stream.upload.uploadPart.returns(Promise.resolve());
+			this.stream.upload.finish.returns(Promise.resolve());
+		});
+
+		it('should work with just a function', function(done) {
+			this.stream.end(done);
+		});
+
+		it('should work with a buffer and function', function(done) {
+			this.stream.end(new Buffer(10), done);
+		});
+
+		it('should work with a buffer, encoding and function', function(done) {
+			this.stream.end('foo', 'utf8', done);
+		});
+
+		it('should not uncork if there is no need', function() {
+			this.stream.uncork();
+			this.sandbox.stub(this.stream, 'uncork');
+			this.stream.end();
+			expect(this.stream.uncork).to.not.be.called;
+		});
+
+		it('should deal with errors', function(done) {
+			var spy = sinon.spy();
+			this.stream.upload.finish.returns(Promise.reject('errorz'));
+			this.stream.once('error', spy);
+			this.stream.end(function(err) {
+				process.nextTick(function() {
+					try {
+						expect(err).to.equal('errorz');
+						expect(spy).to.be.calledOnce;
+						done();
+					} catch (e) {
+						done(e);
+					}
+				});
+			});
+		});
+	});
 });
