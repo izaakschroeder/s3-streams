@@ -4,7 +4,7 @@
 
 var fs = require('fs'),
 	path = require('path'),
-	S3S = require(path.join(__dirname,'..')),
+	S3S = require(path.join(__dirname, '..')),
 	S3 = require('aws-sdk').S3,
 	argv = require('yargs').argv;
 
@@ -20,7 +20,7 @@ var total = 0;
 fs.createReadStream(argv._[0])
 	.on('open', function open(fd) {
 		total = fs.fstatSync(fd).size;
-		console.log('Uploading',total,'bytes.');
+		console.log('Uploading', total, 'bytes.');
 	})
 	.pipe(upload)
 	.on('finish', function end() {
