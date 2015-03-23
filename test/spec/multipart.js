@@ -2,6 +2,7 @@
 'use strict';
 
 var _ = require('lodash'),
+	crypto = require('crypto'),
 	MultipartUpload = require('multipart'),
 	Promise = require('bluebird');
 
@@ -141,7 +142,7 @@ describe('MultipartUpload', function() {
 				Bucket: 'foo',
 				Key: 'bar'
 			});
-			expect(upload.uploadPart()).to.be.an.instanceof(Promise);
+			expect(upload.uploadPart(new Buffer(5))).to.be.an.instanceof(Promise);
 		});
 
 		it('should resolve the promise with the correct results on success', function() {
@@ -152,7 +153,7 @@ describe('MultipartUpload', function() {
 				Bucket: 'foo',
 				Key: 'bar'
 			});
-			return expect(upload.uploadPart()).to.eventually.include(result)
+			return expect(upload.uploadPart(new Buffer(5))).to.eventually.include(result)
 				.and.include({ PartNumber: 1 });
 		});
 
@@ -164,7 +165,18 @@ describe('MultipartUpload', function() {
 				Bucket: 'foo',
 				Key: 'bar'
 			});
-			return expect(upload.uploadPart()).to.be.rejectedWith(result);
+			return expect(upload.uploadPart(new Buffer(5))).to.be.rejectedWith(result);
+		});
+
+		it('should reject the promise if not a buffer', function() {
+			var result = { };
+			this.s3.uploadPart.callsArgWith(1, result);
+			this.s3.createMultipartUpload.callsArgWith(1, null, { UploadId: '5' });
+			var upload = MultipartUpload(this.s3, {
+				Bucket: 'foo',
+				Key: 'bar'
+			});
+			return expect(upload.uploadPart('foo')).to.be.rejected;
 		});
 	});
 
@@ -199,6 +211,46 @@ describe('MultipartUpload', function() {
 				Key: 'bar'
 			});
 			expect(upload.finish()).to.be.an.instanceof(Promise);
+		});
+
+		it('should use fixed eTags if given', function() {
+			this.s3.createMultipartUpload.callsArgWith(1, null, { UploadId: '5' });
+			this.s3.completeMultipartUpload.callsArgWith(1, null, { });
+
+			var upload = MultipartUpload(this.s3, {
+				Bucket: 'foo',
+				Key: 'bar',
+				ETag: 'baz'
+			});
+
+			var s3 = this.s3;
+
+			return expect(upload.finish()).to.be.fulfilled.then(function() {
+				return expect(s3.completeMultipartUpload).to.be.calledWithMatch({
+					ETag: 'baz'
+				});
+			});
+		});
+
+		it('should use custom eTags if given', function() {
+			this.s3.createMultipartUpload.callsArgWith(1, null, { UploadId: '5' });
+			this.s3.completeMultipartUpload.callsArgWith(1, null, { });
+
+			var upload = MultipartUpload(this.s3, {
+				Bucket: 'foo',
+				Key: 'bar',
+				ETag: crypto.createHash('sha1')
+			});
+
+			var expected = crypto.createHash('sha1').digest('hex');
+
+			var s3 = this.s3;
+
+			return expect(upload.finish()).to.be.fulfilled.then(function() {
+				return expect(s3.completeMultipartUpload).to.be.calledWithMatch({
+					ETag: expected
+				});
+			});
 		});
 
 		it('should resolve the promise with the correct results on success', function() {
