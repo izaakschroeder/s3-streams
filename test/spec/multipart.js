@@ -3,7 +3,7 @@
 
 var _ = require('lodash'),
 	MultipartUpload = require('multipart'),
-	Promise = require('es6-promise').Promise;
+	Promise = require('bluebird');
 
 describe('MultipartUpload', function() {
 

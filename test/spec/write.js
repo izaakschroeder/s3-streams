@@ -3,7 +3,7 @@
 
 var _ = require('lodash'),
 	S3WriteStream = require('write'),
-	Promise = require('es6-promise').Promise;
+	Promise = require('bluebird');
 
 describe('S3WriteStream', function() {
 
