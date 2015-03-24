@@ -18,25 +18,26 @@
 		"coverage": "istanbul check-coverage --statement 100 --branch 100 --function 100"
 	},
 	"dependencies": {
-		"lodash": "^2.4.1",
+		"lodash": "^3.5.0",
 		"readable-stream": "^1.1.13",
 		"es6-promise": "^2.0.0"
 	},
 	"peerDependencies": {
-		"aws-sdk": "*"
+		"aws-sdk": "^2.1.18"
 	},
 	"devDependencies": {
-		"eslint": "*",
-		"eslint-plugin-nodeca": "*",
-		"mocha": "*",
-		"istanbul": "*",
-		"chai": "*",
-		"chai-things": "*",
-		"chai-as-promised": "*",
-		"sinon": "*",
-		"sinon-chai": "*"
+		"eslint": "^0.17.1",
+		"eslint-plugin-nodeca": "^1.0.3",
+		"mocha": "^2.2.1",
+		"istanbul": "^0.3.10",
+		"chai": "^2.1.2",
+		"chai-things": "^0.2.0",
+		"chai-as-promised": "^4.3.0",
+		"sinon": "^1.14.1",
+		"sinon-chai": "^2.7.0"
 	},
 	"engines": {
-		"node": ">=0.11"
+		"node": "^0.8 || ^0.10 || ^0.12",
+		"iojs": "^1.2.0"
 	}
 }
