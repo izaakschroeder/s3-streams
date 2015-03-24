@@ -20,7 +20,7 @@
 	"dependencies": {
 		"lodash": "^3.5.0",
 		"readable-stream": "^1.1.13",
-		"es6-promise": "^2.0.0"
+		"bluebird": "^2.9.14"
 	},
 	"peerDependencies": {
 		"aws-sdk": "^2.1.18"
