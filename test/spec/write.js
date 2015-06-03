@@ -167,5 +167,22 @@ describe('S3WriteStream', function() {
 				});
 			});
 		});
+
+		it('should deal with errors without a callback specified', function(done) {
+			var spy = sinon.spy();
+			this.stream.upload.finish.returns(Promise.reject('errorz'));
+			this.stream.once('error', spy);
+			this.stream.on('error', function(err) {
+				try {
+					expect(err).to.equal('errorz');
+					expect(spy).to.be.calledOnce;
+					done();
+				} catch (e) {
+					done(e);
+				}
+			});
+
+			this.stream.end();
+		});
 	});
 });
