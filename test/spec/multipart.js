@@ -137,6 +137,26 @@ describe('MultipartUpload', function() {
 			});
 		});
 
+		it('should include an ETag if necessary', function() {
+			this.s3.createMultipartUpload.callsArgWith(1, null, { UploadId: '5' });
+			this.s3.uploadPart.callsArgWith(1, null, { });
+
+			var eTag = {
+				update: this.sandbox.stub(),
+				digest: this.sandbox.stub()
+			};
+
+			var upload = MultipartUpload(this.s3, {
+				Bucket: 'foo',
+				Key: 'bar',
+				ETag: eTag
+			});
+
+			return expect(upload.uploadPart(new Buffer('foo bar baz'))).to.be.fulfilled.then(function() {
+				return expect(eTag.update.calledOnce).to.be.true;
+			});
+		});
+
 		it('should return a promise', function() {
 			var upload = MultipartUpload(this.s3, {
 				Bucket: 'foo',
@@ -250,6 +270,22 @@ describe('MultipartUpload', function() {
 				return expect(s3.completeMultipartUpload).to.be.calledWithMatch({
 					ETag: expected
 				});
+			});
+		});
+
+		it('should not use eTags if not given', function() {
+			this.s3.createMultipartUpload.callsArgWith(1, null, { UploadId: '5' });
+			this.s3.completeMultipartUpload.callsArgWith(1, null, { });
+
+			var upload = MultipartUpload(this.s3, {
+				Bucket: 'foo',
+				Key: 'bar'
+			});
+
+			var s3 = this.s3;
+
+			return expect(upload.finish()).to.be.fulfilled.then(function() {
+				return expect(s3.completeMultipartUpload).to.not.be.calledWithMatch({ ETag: sinon.match(/.*/) });
 			});
 		});
 
