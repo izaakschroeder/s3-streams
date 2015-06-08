@@ -1,9 +1,9 @@
 # s3-streams
 
-Support for streaming reads and writes from and to S3 using Amazon's native API.
+> Support for streaming reads and writes from and to S3 using Amazon's native API.
 
-![build status](http://img.shields.io/travis/izaakschroeder/s3-streams/master.svg?style=flat)
-![coverage](http://img.shields.io/coveralls/izaakschroeder/s3-streams/master.svg?style=flat)
+![build status](http://img.shields.io/travis/izaakschroeder/s3-streams.svg?style=flat)
+![coverage](http://img.shields.io/coveralls/izaakschroeder/s3-streams.svg?style=flat)
 ![license](http://img.shields.io/npm/l/s3-streams.svg?style=flat)
 ![version](http://img.shields.io/npm/v/s3-streams.svg?style=flat)
 ![downloads](http://img.shields.io/npm/dm/s3-streams.svg?style=flat)
@@ -15,7 +15,6 @@ IMPORTANT: This library uses the `streams3` API. In order to provide compatibili
 If you are using `node 0.8` you must ensure your version of `npm` is at least `1.4.6`.
 
 Features:
- * Smart ETags,
  * Native read streams,
  * Native write streams,
  * Smart piping (piping between S3 objects incurs no local download).
@@ -44,19 +43,6 @@ var download = S3S.ReadStream(new S3(), {
 	Bucket: 'my-bucket',
 	Key: 'my-key',
 	// Any other AWS SDK options
-});
-```
-
-Use sane ETags:
-```javascript
-var crypto = require('crypto'),
-    S3 = require('aws-sdk').S3,
-	S3S = require('s3-streams');
-
-var download = S3S.ReadStream(new S3(), {
-	Bucket: 'my-bucket',
-	Key: 'my-key',
-	ETag: crypto.createHash('sha1')
 });
 ```
 
