@@ -1,6 +1,4 @@
 
-'use strict';
-
 var _ = require('lodash'),
 	crypto = require('crypto'),
 	S3ReadStream = require('read'),
