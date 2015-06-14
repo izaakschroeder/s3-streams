@@ -1,6 +1,4 @@
 
-'use strict';
-
 var _ = require('lodash'),
 	MultipartUpload = require('multipart'),
 	Promise = require('bluebird');

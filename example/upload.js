@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-'use strict';
-
 var fs = require('fs'),
 	path = require('path'),
 	S3S = require(path.join(__dirname, '..')),

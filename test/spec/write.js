@@ -1,6 +1,4 @@
 
-'use strict';
-
 var _ = require('lodash'),
 	S3WriteStream = require('write'),
 	Promise = require('bluebird');
