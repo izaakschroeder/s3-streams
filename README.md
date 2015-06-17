@@ -17,7 +17,15 @@ If you are using `node 0.8` you must ensure your version of `npm` is at least `1
 Features:
  * Native read streams,
  * Native write streams,
- * Smart piping (piping between S3 objects incurs no local download).
+ * Smart piping.
+
+## Usage
+
+```sh
+npm install s3-streams
+```
+
+### Write Streams
 
 Create streams for uploading to S3:
 ```javascript
@@ -34,6 +42,8 @@ var upload = S3S.WriteStream(new S3(), {
 });
 ```
 
+### Read Streams
+
 Create streams for downloading from S3:
 ```javascript
 var S3 = require('aws-sdk').S3,
@@ -44,6 +54,22 @@ var download = S3S.ReadStream(new S3(), {
 	Key: 'my-key',
 	// Any other AWS SDK options
 });
+```
+
+### Smart Piping
+
+Smart pipe files over HTTP:
+
+```javascript
+var http = require('http'),
+    S3 = require('aws-sdk').S3,
+	S3S = require('s3-streams');
+
+http.createServer(function(req, res) {
+    var src = S3S.ReadStream(...);
+    // Automatically sets the correct HTTP headers
+    src.pipe(res);
+})
 ```
 
 Smart pipe files on S3:
@@ -57,6 +83,8 @@ var src = S3S.ReadStream(...),
 // No data ever gets downloaded locally.
 src.pipe(dst);
 ```
+
+### Extras
 
 You can create streams with different settings by creating a partial for the specific S3 instance you have:
 
