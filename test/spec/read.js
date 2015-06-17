@@ -167,4 +167,42 @@ describe('S3ReadStream', function() {
 			expect(emit).to.be.calledWithMatch('open', { Bucket: 'foo', Key: 'bar', ContentLength: 5 });
 		});
 	});
+
+	describe('#pipe', function() {
+		describe('HTTP smart piping', function() {
+			var source, target;
+
+			beforeEach(function() {
+				source = S3ReadStream(this.s3, { Bucket: 'foo', Key: 'bar' }, { highWaterMark: 500 });
+				target = {
+					setHeader: sinon.stub(),
+					on: sinon.stub(),
+					once: sinon.stub(),
+					emit: sinon.stub()
+				};
+			});
+			it('should set HTTP headers in smart mode', function() {
+				source.pipe(target);
+				// Since target is fake, yank the stream ourselves
+				source.read(0);
+				this.request.emit('httpHeaders', 200, {
+					'content-length': 5,
+					'content-type': 'ab'
+				});
+				expect(target.setHeader).to.be.calledWith('Content-Length', 5);
+				expect(target.setHeader).to.be.calledWith('Content-Type', 'ab');
+			});
+			it('should do nothing in dumb mode', function() {
+				source.pipe(target, { smart: false });
+				// Since target is fake, yank the stream ourselves
+				source.read(0);
+				this.request.emit('httpHeaders', 200, {
+					'content-length': 5,
+					'content-type': 'ab'
+				});
+				expect(target.setHeader).to.not.beCalled;
+			});
+		});
+
+	});
 });
