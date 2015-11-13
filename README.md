@@ -57,18 +57,26 @@ var download = S3S.ReadStream(new S3(), {
 ```
 
 ### Smart Piping
+Smart piping automatically forwards headers returned from the S3 service directly to your pipe destination if it has `setHeader` function. 
+
+The headers option has two potential models:
+- Array: If headers is an array, it will forward any header values that are present on the S3 response.
+- Truthy: If it is any other truthy value, only, two headers will be sent ('Content-Type' and 'Content-Length'). 
 
 Smart pipe files over HTTP:
 
 ```javascript
 var http = require('http'),
     S3 = require('aws-sdk').S3,
-	S3S = require('s3-streams');
+	S3S = require('s3-streams'),
+    opts = {
+        headers: ['content-type', 'content-length', 'content-range']
+    };
 
 http.createServer(function(req, res) {
     var src = S3S.ReadStream(...);
     // Automatically sets the correct HTTP headers
-    src.pipe(res);
+    src.pipe(res, opts);
 })
 ```
 
@@ -78,10 +86,13 @@ var S3 = require('aws-sdk').S3,
 	S3S = require('s3-streams');
 
 var src = S3S.ReadStream(...),
-	dst = S3S.WriteStream(...);
+	dst = S3S.WriteStream(...),
+    opts = {
+        headers: true // send 'content-type', 'content-length' if truthy
+    };
 
 // No data ever gets downloaded locally.
-src.pipe(dst);
+src.pipe(dst, opts);
 ```
 
 ### Extras
