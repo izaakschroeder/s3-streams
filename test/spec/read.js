@@ -166,6 +166,18 @@ describe('S3ReadStream', function() {
 			this.request.emit('httpHeaders', 200, { });
 			expect(emit).to.be.calledWithMatch('open', { Bucket: 'foo', Key: 'bar', ContentLength: 5 });
 		});
+
+		it('should send all the headers and the status code provided by S3', function() {
+			var emit = this.sandbox.stub(this.stream, 'emit');
+			this.stream.read(0);
+			// some different headers S3 responds with depending on the request
+			this.request.emit('httpHeaders', 206, { 'content-length': 5, 'content-range': 'bytes 0-1099/1100', 'ETag': '12345678'});
+			expect(emit).to.be.calledWithMatch('open', { Bucket: 'foo', Key: 'bar', StatusCode: 206, Headers: {
+				'content-length': 5,
+				'content-range': 'bytes 0-1099/1100',
+				'ETag': '12345678'
+			}});
+		});
 	});
 
 	describe('#pipe', function() {
@@ -181,7 +193,7 @@ describe('S3ReadStream', function() {
 					emit: sinon.stub()
 				};
 			});
-			it('should set HTTP headers in smart mode', function() {
+			it('should set default HTTP headers if headers opt is set to true or omitted (smart mode)', function() {
 				source.pipe(target);
 				// Since target is fake, yank the stream ourselves
 				source.read(0);
@@ -192,8 +204,25 @@ describe('S3ReadStream', function() {
 				expect(target.setHeader).to.be.calledWith('Content-Length', 5);
 				expect(target.setHeader).to.be.calledWith('Content-Type', 'ab');
 			});
-			it('should do nothing in dumb mode', function() {
-				source.pipe(target, { smart: false });
+			it('should set the prescribed HTTP headers if present and header is set to a list', function() {
+				source.pipe(target, {
+					headers: ['content-length', 'content-type', 'etag', 'not-a-header']
+				});
+				// Since target is fake, yank the stream ourselves
+				source.read(0);
+				this.request.emit('httpHeaders', 200, {
+					'content-length': 5,
+					'content-type': 'ab',
+					'etag': '123456',
+					'Server': 'Amazon'
+				});
+				expect(target.setHeader).to.be.calledWith('content-length', 5);
+				expect(target.setHeader).to.be.calledWith('content-type', 'ab');
+				expect(target.setHeader).to.be.calledWith('etag', '123456');
+				expect(target.setHeader).to.not.be.calledWith('Server', 'Amazon');
+			});
+			it('should do nothing in dumb mode (headers:false)', function() {
+				source.pipe(target, { headers: false });
 				// Since target is fake, yank the stream ourselves
 				source.read(0);
 				this.request.emit('httpHeaders', 200, {
