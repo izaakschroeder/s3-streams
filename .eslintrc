@@ -29,7 +29,7 @@
 		"quotes": [2, "single"],
 		"radix": 2,
 		"space-after-keywords": [2, "always"],
-		"spaced-line-comment": 2,
+		"spaced-comment": 2,
 		"strict": [2, "never"],
 		"valid-jsdoc": [2, {
 			"prefer": {
