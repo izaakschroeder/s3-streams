@@ -103,7 +103,7 @@ describe('S3WriteStream', function() {
 					expect(spy).to.be.calledOnce.and.calledWith('fail');
 					expect(err).to.equal('fail');
 					done();
-				} catch(e) {
+				} catch (e) {
 					done(e);
 				}
 			}).on('finish', function() {
