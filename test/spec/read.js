@@ -231,6 +231,16 @@ describe('S3ReadStream', function() {
 				});
 				expect(target.setHeader).to.not.beCalled;
 			});
+			it('should do nothing in legacy mode (smart:false)', function() {
+				source.pipe(target, { smart: false });
+				// Since target is fake, yank the stream ourselves
+				source.read(0);
+				this.request.emit('httpHeaders', 200, {
+					'content-length': 5,
+					'content-type': 'ab'
+				});
+				expect(target.setHeader).to.not.beCalled;
+			});
 		});
 
 	});
