@@ -18,8 +18,6 @@
 		"coverage": "istanbul check-coverage --statement 100 --branch 100 --function 100"
 	},
 	"dependencies": {
-		"readable-stream": "^2.0.0",
-		"bluebird": "^2.9.27"
 	},
 	"peerDependencies": {
     "aws-sdk": "^2.6.13"

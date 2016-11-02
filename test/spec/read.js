@@ -2,7 +2,7 @@
 
 var crypto = require('crypto'),
 	S3ReadStream = require('read'),
-	Stream = require('readable-stream'),
+	Stream = require('stream'),
 	EventEmitter = require('events').EventEmitter;
 
 /*

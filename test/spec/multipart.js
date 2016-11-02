@@ -1,7 +1,6 @@
 'use strict';
 
-var MultipartUpload = require('multipart'),
-	Promise = require('bluebird');
+var MultipartUpload = require('multipart');
 
 describe('MultipartUpload', function() {
 
