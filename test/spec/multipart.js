@@ -1,6 +1,6 @@
+'use strict';
 
-var _ = require('lodash'),
-	MultipartUpload = require('multipart'),
+var MultipartUpload = require('multipart'),
 	Promise = require('bluebird');
 
 describe('MultipartUpload', function() {
@@ -25,11 +25,11 @@ describe('MultipartUpload', function() {
 		});
 
 		it('should fail when no `Bucket` parameter is provided', function() {
-			expect(_.partial(MultipartUpload, this.s3, { Key: 'bar' })).to.throw(TypeError);
+			expect(MultipartUpload.bind(null, this.s3, { Key: 'bar' })).to.throw(TypeError);
 		});
 
 		it('should fail when no `Key` parameter is provided', function() {
-			expect(_.partial(MultipartUpload, this.s3, { Bucket: 'foo' })).to.throw(TypeError);
+			expect(MultipartUpload.bind(null, this.s3, { Bucket: 'foo' })).to.throw(TypeError);
 		});
 	});
 

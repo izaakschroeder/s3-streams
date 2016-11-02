@@ -1,6 +1,6 @@
+'use strict';
 
-var _ = require('lodash'),
-	crypto = require('crypto'),
+var crypto = require('crypto'),
 	S3ReadStream = require('read'),
 	Stream = require('readable-stream'),
 	EventEmitter = require('events').EventEmitter;
@@ -65,11 +65,11 @@ describe('S3ReadStream', function() {
 		});
 
 		it('should fail when no `Bucket` parameter is provided', function() {
-			expect(_.partial(S3ReadStream, this.s3, { Key: 'bar' })).to.throw(TypeError);
+			expect(S3ReadStream.bind(null, this.s3, { Key: 'bar' })).to.throw(TypeError);
 		});
 
 		it('should fail when no `Key` parameter is provided', function() {
-			expect(_.partial(S3ReadStream, this.s3, { Bucket: 'foo' })).to.throw(TypeError);
+			expect(S3ReadStream.bind(null, this.s3, { Bucket: 'foo' })).to.throw(TypeError);
 		});
 
 		it('should create a valid stream', function() {
