@@ -30,7 +30,6 @@
 		"radix": 2,
 		"keyword-spacing": [2, { "after": true }],
 		"spaced-comment": 2,
-		"strict": [2, "never"],
 		"valid-jsdoc": [2, {
 			"prefer": {
 				"return": "returns"
