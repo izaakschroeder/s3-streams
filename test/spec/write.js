@@ -1,7 +1,5 @@
-
-var _ = require('lodash'),
-	S3WriteStream = require('write'),
-	Promise = require('bluebird');
+'use strict';
+var S3WriteStream = require('../../lib/write');
 
 describe('S3WriteStream', function() {
 
@@ -16,19 +14,19 @@ describe('S3WriteStream', function() {
 
 	describe('constructor', function() {
 		it('should fail when no S3 instance is provided', function() {
-			expect(S3WriteStream).to.throw(TypeError);
+			expect(S3WriteStream.bind(null)).to.throw(TypeError);
 		});
 
 		it('should fail when no `Bucket` parameter is provided', function() {
-			expect(_.partial(S3WriteStream, this.s3, { Key: 'bar' })).to.throw(TypeError);
+			expect(S3WriteStream.bind(null, this.s3, { Key: 'bar' })).to.throw(TypeError);
 		});
 
 		it('should fail when no `Key` parameter is provided', function() {
-			expect(_.partial(S3WriteStream, this.s3, { Bucket: 'foo' })).to.throw(TypeError);
+			expect(S3WriteStream.bind(null, this.s3, { Bucket: 'foo' })).to.throw(TypeError);
 		});
 
 		it('should fail when an invalid `highWaterMark` is provided', function() {
-			expect(_.partial(S3WriteStream, this.s3, { Bucket: 'foo', Key: 'bar' }, { highWaterMark: 100 })).to.throw(TypeError);
+			expect(S3WriteStream.bind(null, this.s3, { Bucket: 'foo', Key: 'bar' }, { highWaterMark: 100 })).to.throw(TypeError);
 		});
 
 		it('should create a valid stream', function() {
@@ -103,7 +101,7 @@ describe('S3WriteStream', function() {
 					expect(spy).to.be.calledOnce.and.calledWith('fail');
 					expect(err).to.equal('fail');
 					done();
-				} catch(e) {
+				} catch (e) {
 					done(e);
 				}
 			}).on('finish', function() {
