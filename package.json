@@ -5,10 +5,10 @@
 	"author": "Izaak Schroeder <izaak.schroeder@gmail.com>",
 	"keywords": [
 		"s3",
-		"stream",
-		"upload",
-		"download"
-	],
+	"stream",
+	"upload",
+	"download"
+		],
 	"license": "CC0-1.0",
 	"homepage": "https://github.com/izaakschroeder/s3-streams",
 	"repository": {
@@ -22,20 +22,17 @@
 		"lint": "eslint --ignore-path .gitignore .",
 		"coverage": "istanbul check-coverage --statement 100 --branch 100 --function 100"
 	},
-	"dependencies": {
-	},
-	"peerDependencies": {
-    "aws-sdk": "^2.6.13"
-	},
+	"dependencies": {},
 	"devDependencies": {
-    "chai": "^3.5.0",
-		"chai-as-promised": "^4.3.0",
-    "chai-things": "^0.2.0",
-    "eslint": "^3.9.1",
-    "istanbul": "^0.4.5",
-    "mocha": "^3.1.2",
-    "sinon": "^1.17.6",
-    "sinon-chai": "^2.8.0"
+		"aws-sdk": "^2.6.13",
+		"chai": "^3.5.0",
+		"chai-as-promised": "^6.0.0",
+		"chai-things": "^0.2.0",
+		"eslint": "^3.9.1",
+		"istanbul": "^0.4.5",
+		"mocha": "^3.1.2",
+		"sinon": "^1.17.6",
+		"sinon-chai": "^2.8.0"
 	},
 	"engines": {
 		"node": ">= 6.0"
