@@ -131,23 +131,19 @@ describe('S3ReadStream', function() {
 
 			var collect = [ ];
 			stream.on('readable', function() {
-				console.log('not reading');
 				var buf;
 				while (null !== (buf = this.read())) {
 					collect.push(buf);
 				}
-				console.log('finis reading');
 			}).on('end', function() {
-				console.log('finish compe');
 				var result = Buffer.concat(collect);
 				expect(result.toString('hex')).to.equal(data.toString('hex'));
-				console.log('here?');
 				done();
 			}).on('error', function(err) {
 				done('stream error', err);
 			});
 
-			stream.read(0);
+			stream.read(1000);
 
 			this.request.emit('httpHeaders', 200, { 'content-length': data.length });
 			this.source.end(data);
