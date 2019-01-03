@@ -6,7 +6,7 @@ var _ = require('lodash'),
 describe('MultipartUpload', function() {
 
 	beforeEach(function() {
-		this.sandbox = sinon.sandbox.create();
+		this.sandbox = sinon.createSandbox();
 		this.s3 = {
 			uploadPart: this.sandbox.stub(),
 			abortMultipartUpload: this.sandbox.stub(),
@@ -107,7 +107,7 @@ describe('MultipartUpload', function() {
 			});
 			var s3 = this.s3;
 
-			return expect(upload.uploadPart(new Buffer('foo'))).to.be.fulfilled.then(function() {
+			return expect(upload.uploadPart(new Buffer.from('foo'))).to.be.fulfilled.then(function() {
 				return expect(s3.uploadPart).to.be.calledWithMatch({
 					UploadId: '5',
 					Bucket: 'foo',
@@ -125,7 +125,7 @@ describe('MultipartUpload', function() {
 				ContentMD5: true
 			});
 			var s3 = this.s3;
-			return expect(upload.uploadPart(new Buffer('foo'))).to.be.fulfilled.then(function() {
+			return expect(upload.uploadPart(new Buffer.from('foo'))).to.be.fulfilled.then(function() {
 				return expect(s3.uploadPart).to.be.calledWithMatch({
 					UploadId: '5',
 					Bucket: 'foo',
