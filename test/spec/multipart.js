@@ -107,7 +107,7 @@ describe('MultipartUpload', function() {
 			});
 			var s3 = this.s3;
 
-			return expect(upload.uploadPart(new Buffer.alloc(20))).to.be.fulfilled.then(function() {
+			return expect(upload.uploadPart(new Buffer.alloc('foo'))).to.be.fulfilled.then(function() {
 				return expect(s3.uploadPart).to.be.calledWithMatch({
 					UploadId: '5',
 					Bucket: 'foo',
@@ -125,7 +125,7 @@ describe('MultipartUpload', function() {
 				ContentMD5: true
 			});
 			var s3 = this.s3;
-			return expect(upload.uploadPart(new Buffer.alloc(20))).to.be.fulfilled.then(function() {
+			return expect(upload.uploadPart(new Buffer.alloc('foo'))).to.be.fulfilled.then(function() {
 				return expect(s3.uploadPart).to.be.calledWithMatch({
 					UploadId: '5',
 					Bucket: 'foo',
