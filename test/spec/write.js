@@ -1,6 +1,6 @@
 
 var _ = require('lodash'),
-	S3WriteStream = require('write'),
+	S3WriteStream = require('../../lib/write.js'),
 	Promise = require('bluebird');
 
 describe('S3WriteStream', function() {
