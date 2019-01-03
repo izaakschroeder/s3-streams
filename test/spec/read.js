@@ -108,7 +108,7 @@ describe('S3ReadStream', function() {
 				done();
 			});
 			stream.read(0);
-			this.source.end(new Buffer.from('foo'));
+			this.source.end(new Buffer.alloc(1));
 		});
 
 		it('should error if S3 provides no http information', function(done) {
@@ -201,7 +201,7 @@ describe('S3ReadStream', function() {
 					'content-length': 5,
 					'content-type': 'ab'
 				});
-				expect(target.setHeader).to.not.called;
+				expect(target.setHeader).to.not.calledOnce;
 			});
 		});
 
