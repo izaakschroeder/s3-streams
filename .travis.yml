@@ -6,14 +6,8 @@ node_js:
 - 8
 - 7
 - 6
-- 5
-- 4
-- 'iojs-v1.2.0'
-- '0.12'
-- '0.10'
-- '0.8'
 before_install:
-- npm install -g "npm@>=1.4.6"
+- npm install -g npm
 after_success:
 - npm install coveralls
 - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
