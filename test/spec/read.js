@@ -47,7 +47,7 @@ chai.overwriteProperty('ok', function (_super) {
 describe('S3ReadStream', function() {
 
 	beforeEach(function() {
-		this.sandbox = sinon.sandbox.create();
+		this.sandbox = sinon.createSandbox();
 		this.s3 = { getObject: this.sandbox.stub() };
 		this.request = new EventEmitter();
 		this.s3.getObject.returns(this.request);
@@ -108,7 +108,7 @@ describe('S3ReadStream', function() {
 				done();
 			});
 			stream.read(0);
-			this.source.end(new Buffer(1));
+			this.source.end(new Buffer.alloc(1));
 		});
 
 		it('should error if S3 provides no http information', function(done) {
@@ -143,7 +143,7 @@ describe('S3ReadStream', function() {
 				done('stream error', err);
 			});
 
-			stream.read(0);
+			stream.read(1000);
 
 			this.request.emit('httpHeaders', 200, { 'content-length': data.length });
 			this.source.end(data);
@@ -200,7 +200,7 @@ describe('S3ReadStream', function() {
 					'content-length': 5,
 					'content-type': 'ab'
 				});
-				expect(target.setHeader).to.not.beCalled;
+				expect(target.setHeader).to.not.called;
 			});
 		});
 

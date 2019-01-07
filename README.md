@@ -2,8 +2,8 @@
 
 Support for streaming reads and writes from and to S3 using Amazon's native API.
 
-![build status](http://img.shields.io/travis/izaakschroeder/s3-streams/master.svg?style=flat)
-![coverage](http://img.shields.io/coveralls/izaakschroeder/s3-streams/master.svg?style=flat)
+![build status](http://img.shields.io/travis/andylockran/s3-streams/master.svg?style=flat)
+![coverage](http://img.shields.io/coveralls/andylockran/s3-streams/master.svg?style=flat)
 ![license](http://img.shields.io/npm/l/s3-streams.svg?style=flat)
 ![version](http://img.shields.io/npm/v/s3-streams.svg?style=flat)
 ![downloads](http://img.shields.io/npm/dm/s3-streams.svg?style=flat)
