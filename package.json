@@ -1,6 +1,6 @@
 {
 	"name": "s3-streams",
-	"version": "0.3.0",
+	"version": "0.4.0",
 	"description": "Use readable/writeable streams for manipulating S3 objects.",
 	"author": "Izaak Schroeder <izaak.schroeder@gmail.com>",
 	"keywords": [
