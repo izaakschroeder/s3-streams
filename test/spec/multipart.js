@@ -177,6 +177,39 @@ describe('MultipartUpload', function() {
 				Key: 'bar'
 			});
 
+			upload.parts = [
+				{
+					ETag: 'test1',
+					PartNumber: 1,
+					Encryption: true
+				},
+				{
+					ETag: 'test2',
+					PartNumber: 2,
+					Encryption: true
+				},
+				{
+					ETag: 'test3',
+					PartNumber: 4,
+					Encryption: true
+				}
+			];
+
+			var cleanedParts = [
+				{
+					ETag: 'test1',
+					PartNumber: 1
+				},
+				{
+					ETag: 'test2',
+					PartNumber: 2
+				},
+				{
+					ETag: 'test3',
+					PartNumber: 4
+				}
+			];
+
 			var s3 = this.s3;
 
 			return expect(upload.finish()).to.be.fulfilled.then(function() {
@@ -185,7 +218,7 @@ describe('MultipartUpload', function() {
 					Key: 'bar',
 					UploadId: '5',
 					MultipartUpload: {
-						Parts: [ ]
+						Parts: cleanedParts
 					}
 				});
 			});

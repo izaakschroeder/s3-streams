@@ -1,6 +1,6 @@
 
 var _ = require('lodash'),
-	S3WriteStream = require('write'),
+	S3WriteStream = require('../../lib/write.js'),
 	Promise = require('bluebird');
 
 describe('S3WriteStream', function() {
@@ -54,14 +54,14 @@ describe('S3WriteStream', function() {
 		});
 
 		it('should not write any data if the chunk threshold is not met', function() {
-			this.stream.write(new Buffer(S3WriteStream.lowWaterMark - 2));
-			this.stream.write(new Buffer(1));
+			this.stream.write(new Buffer.alloc(S3WriteStream.lowWaterMark - 2));
+			this.stream.write(new Buffer.alloc(1));
 			expect(this.stream._writev).to.not.be.called;
 		});
 
 		it('should write data if the chunk threshold is reached', function() {
-			this.stream.write(new Buffer(S3WriteStream.lowWaterMark - 1));
-			this.stream.write(new Buffer(1));
+			this.stream.write(new Buffer.alloc(S3WriteStream.lowWaterMark - 1));
+			this.stream.write(new Buffer.alloc(1));
 			expect(this.stream._writev).to.be.calledOnce;
 		});
 	});
@@ -70,8 +70,8 @@ describe('S3WriteStream', function() {
 		it('should invoke _part with all collected data', function() {
 			var stream = S3WriteStream(this.s3, { Bucket: 'foo', Key: 'bar' });
 			this.sandbox.stub(stream, '_part');
-			stream.write(new Buffer('a'));
-			stream.write(new Buffer('b'));
+			stream.write(new Buffer.from('a'));
+			stream.write(new Buffer.from('b'));
 			stream.end();
 			expect(stream._part).to.be.calledOnce;
 			expect(stream._part.getCall(0).args[0].toString()).to.equal('ab');
@@ -90,7 +90,7 @@ describe('S3WriteStream', function() {
 
 		it('should pass all the data on to #uploadPart', function() {
 			this.stream.upload.uploadPart.returns(Promise.resolve());
-			this.stream.write(new Buffer(S3WriteStream.lowWaterMark));
+			this.stream.write(new Buffer.alloc(S3WriteStream.lowWaterMark));
 			expect(this.stream.upload.uploadPart).to.be.calledOnce;
 		});
 
@@ -103,13 +103,13 @@ describe('S3WriteStream', function() {
 					expect(spy).to.be.calledOnce.and.calledWith('fail');
 					expect(err).to.equal('fail');
 					done();
-				} catch(e) {
+				} catch (e) {
 					done(e);
 				}
 			}).on('finish', function() {
 				done('no error triggered');
 			});
-			this.stream.write(new Buffer(S3WriteStream.lowWaterMark), spy);
+			this.stream.write(new Buffer.alloc(S3WriteStream.lowWaterMark), spy);
 			// The callback in end will NOT be triggered as per the stream
 			// spec; the end callback fires _only_ when the finish event
 			// fires, and since there's an error there will be no finish.
@@ -135,7 +135,7 @@ describe('S3WriteStream', function() {
 		});
 
 		it('should work with a buffer and function', function(done) {
-			this.stream.end(new Buffer(10), done);
+			this.stream.end(new Buffer.alloc(10), done);
 		});
 
 		it('should work with a buffer, encoding and function', function(done) {
