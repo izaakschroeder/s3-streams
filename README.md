@@ -67,6 +67,12 @@ var http = require('http'),
 
 http.createServer(function(req, res) {
     var src = S3S.ReadStream(...);
+
+    // error event must be handled
+    src.on('error', function(err) {
+        res.status(err.statusCode).end();
+    });
+
     // Automatically sets the correct HTTP headers
     src.pipe(res);
 })
