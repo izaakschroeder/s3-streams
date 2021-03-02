@@ -1,6 +1,6 @@
 {
-	"name": "@code_monk/s3-streams",
-	"version": "0.4.1",
+	"name": "s3-streams",
+	"version": "0.4.0",
 	"description": "Use readable/writeable streams for manipulating S3 objects.",
 	"author": "Izaak Schroeder <izaak.schroeder@gmail.com>",
 	"keywords": [
@@ -10,10 +10,10 @@
 		"download"
 	],
 	"license": "CC0-1.0",
-	"homepage": "https://github.com/sean9999/s3-streams.git",
+	"homepage": "https://github.com/izaakschroeder/s3-streams",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/sean9999/s3-streams.git"
+		"url": "https://github.com/izaakschroeder/s3-streams.git"
 	},
 	"main": "lib/s3.js",
 	"scripts": {
